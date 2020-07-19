@@ -1,0 +1,22 @@
+#!/bin/rc
+
+scheddir=$home/lib/srs/sched-sm2
+today=`{echo `{date -nu} 60 / 60 / 24 / p | dc}
+
+mkdir -p `{basename -d $scheddir/$1}
+touch $scheddir/$1 $scheddir/_index
+awk -F'	' \
+	-v 'today='$today \
+	-v 'item='$1 \
+	'$2>=today {
+		if(!done)
+			print item "\t" today "\t" 1 "\t" 2.5
+		print $0
+		done=1
+	}
+	END {
+		if(!done)
+			print item "\t" today "\t" 1 "\t" 2.5
+	}' \
+ <$scheddir/_index >$scheddir/_index.new
+mv $scheddir/_index.new $scheddir/_index

@@ -1,0 +1,6 @@
+#!/bin/rc
+
+aux/stub -d /bin/srs
+bind -a cmd /bin/srs
+aux/stub -d /bin/srs/sched
+bind /bin/srs/sched-sm2 /bin/srs/sched

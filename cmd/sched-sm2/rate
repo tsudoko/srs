@@ -1,0 +1,48 @@
+#!/bin/rc
+
+scheddir=$home/lib/srs/sched-sm2
+now=`{date -nu}
+today=`{echo $now 60 / 60 / 24 / p | dc}
+ifs='
+	'
+
+# TODO: some way to identify algorithms in logs would be nice (for full history between scheduler switches)
+#       the simplest way would be an additional $schedname-$schedver field I guess
+
+# TODO: rewrite srs/sched-sm2/sm2 in awk, maybe inline
+
+item=$1
+old=`{awk -F'	' -v 'item='$item '$1==item{printf $3"\t"$4}' < $scheddir/_index}
+oldreps=$old(1)
+oldease=$old(2)
+score=$2
+params=`{srs/sched-sm2/sm2 $oldreps $oldease $score}
+ivl=$params(1)
+ease=$params(2)
+lapse=$params(3)
+
+echo $now'	'$ivl'	'$ease'	'$"lapse >> $scheddir/$item
+awk -F'	' \
+	-v 'item='$item \
+	-v 'today='$today^'' \
+	-v 'ivl='$ivl \
+	-v 'ease='$ease \
+	-v 'lapse='$"lapse \
+	-v 'oldreps='$oldreps \
+	'BEGIN {
+		due = (lapse ? today : today+ivl)
+		reps = (lapse ? 1 : oldreps+1)
+	}
+	$2>=due && !done {
+		print item "\t" due "\t" reps "\t" ease "\t"
+		done=1
+	}
+	$1!=item {
+		print
+	}
+	END {
+		if(!done)
+			print item "\t" due "\t" reps "\t" ease "\t"
+	}' \
+ <$scheddir/_index >$scheddir/_index.new
+mv $scheddir/_index.new $scheddir/_index

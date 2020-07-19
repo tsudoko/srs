@@ -1,0 +1,6 @@
+#!/bin/rc
+
+scheddir=$home/lib/srs/sched-sm2
+today=`{echo `{date -nu} 60 / 60 / 24 / p | dc}
+
+awk -F'	' -v 'today='$today '{ if($2<=today) print $1; else exit }' <$scheddir/_index 

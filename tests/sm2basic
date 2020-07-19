@@ -1,0 +1,33 @@
+#!/bin/rc
+
+# cwd assumed to be (srs-repo-root)/tests
+
+testdir=/tmp/srs-test-`{basename $0}
+rm -rf $testdir
+
+aux/stub -d $home/lib/srs
+mkdir $testdir
+bind $testdir $home/lib/srs
+mkdir $testdir/^(data sched-sm2)
+
+aux/stub -d /bin/srs
+bind ../cmd /bin/srs
+aux/stub -d /bin/srs/sched
+bind /bin/srs/sched-sm2 /bin/srs/sched
+
+mkdir $testdir/data/test0
+echo 'front side' >> $testdir/data/test0/front
+echo 'front side
+---
+back side' >> $testdir/data/test0/back
+
+for(i in `{seq 0 5}) {
+	srs/sched-sm2/add test^$i
+	srs/sched-sm2/rate test^$i $i
+	echo test^$i result:
+	cat $home/lib/srs/sched-sm2/test^$i
+	echo
+}
+
+echo index:
+cat $home/lib/srs/sched-sm2/_index
