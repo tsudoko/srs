@@ -12,11 +12,11 @@ ifs='
 # TODO: rewrite srs/sched-sm2/sm2 in awk, maybe inline
 
 item=$1
-old=`{awk -F'	' -v 'item='$item '$1==item{printf $4"\t"$5}' < $scheddir/_index}
-oldreps=$old(1)
+old=`{awk -F'	' -v 'item='$item '$1==item{printf $4+1"\t"$5}' < $scheddir/_index}
+reps=$old(1)
 oldease=$old(2)
 score=$2
-params=`{srs/sched-sm2/sm2 $oldreps $oldease $score}
+params=`{srs/sched-sm2/sm2 $reps $oldease $score}
 ivl=$params(1)
 ease=$params(2)
 lapse=$params(3)
@@ -28,11 +28,11 @@ awk -F'	' \
 	-v 'ivl='$ivl \
 	-v 'ease='$ease \
 	-v 'lapse='$"lapse \
-	-v 'oldreps='$oldreps \
+	-v 'reps='$reps \
 	-v 'scheduler=sm2' \
 	'BEGIN {
 		due = (lapse ? today : today+ivl)
-		reps = (lapse ? 1 : oldreps+1)
+		reps = (lapse ? 0 : reps)
 	}
 	$2>=due && !done {
 		print item "\t" due "\t" scheduler "\t" reps "\t" ease "\t"

@@ -11,13 +11,13 @@ awk -F'	' \
 	-v 'scheduler=sm2' \
 	'$2>=today {
 		if(!done)
-			print item "\t" today "\t" scheduler "\t" 1 "\t" 2.5
+			print item "\t" today "\t" scheduler "\t" 0 "\t" 2.5
 		print $0
 		done=1
 	}
 	END {
 		if(!done)
-			print item "\t" today "\t" scheduler "\t" 1 "\t" 2.5
+			print item "\t" today "\t" scheduler "\t" 0 "\t" 2.5
 	}' \
  <$scheddir/_index >$scheddir/_index.new
 mv $scheddir/_index.new $scheddir/_index
