@@ -1,8 +1,6 @@
 #!/bin/rc
 
 scheddir=$home/lib/srs/sched-sm2
-now=`{date -nu}
-today=`{echo $now 60 / 60 / 24 / p | dc}
 ifs='
 	'
 
@@ -16,7 +14,6 @@ awk -F'	' \
 	-v 'item='$item \
 	-v 'score='$score \
 	-v 'oldease='$oldease \
-	-v 'today='$today^'' \
 	-v 'reps='$reps \
 	-v 'scheduler=sm2' \
 	'
@@ -35,6 +32,7 @@ awk -F'	' \
 
 	BEGIN {
 		"date -n" | getline now
+		today = int(now / 60 / 60 / 24)
 		if(score < 3) {
 			ease = oldease
 			ivl = 1
