@@ -6,31 +6,45 @@ today=`{echo $now 60 / 60 / 24 / p | dc}
 ifs='
 	'
 
-# TODO: some way to identify algorithms in logs would be nice (for full history between scheduler switches)
-#       the simplest way would be an additional $schedname-$schedver field I guess
-
-# TODO: rewrite srs/sched-sm2/sm2 in awk, maybe inline
-
 item=$1
 old=`{awk -F'	' -v 'item='$item '$1==item{printf $4+1"\t"$5}' < $scheddir/_index}
 reps=$old(1)
 oldease=$old(2)
 score=$2
-params=`{srs/sched-sm2/sm2 $reps $oldease $score}
-ivl=$params(1)
-ease=$params(2)
-lapse=$params(3)
 
-echo $now'	'$ivl'	'$ease'	'$"lapse >> $scheddir/$item
 awk -F'	' \
 	-v 'item='$item \
+	-v 'score='$score \
+	-v 'oldease='$oldease \
 	-v 'today='$today^'' \
-	-v 'ivl='$ivl \
-	-v 'ease='$ease \
-	-v 'lapse='$"lapse \
 	-v 'reps='$reps \
 	-v 'scheduler=sm2' \
-	'BEGIN {
+	'
+	function new_ivl(reps, ease) {
+		if(reps <= 1)
+			return 1
+		if(reps == 2)
+			return 6
+
+		return new_ivl(reps-1, ease)*ease
+	}
+
+	function new_ease(ease, score) {
+		return ease+(0.1-(5-score)*(0.08+(5-score)*0.02))
+	}
+
+	BEGIN {
+		"date -n" | getline now
+		if(score < 3) {
+			ease = oldease
+			ivl = 1
+			lapse = "lapse"
+		} else {
+			ease = new_ease(oldease, score)
+			ivl = new_ivl(reps, ease)
+		}
+
+		print now "\t" ivl "\t" ease "\t" lapse >> (ENVIRON["scheddir"]"/"item)
 		due = (lapse ? today : today+ivl)
 		reps = (lapse ? 0 : reps)
 	}
