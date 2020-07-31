@@ -3,20 +3,25 @@ Index file
 
 Entries are sorted by due date in ascending order.
 
-	itemname "\t" due "\t" reps "\t" ease
+	itemname "\t" due "\t" scheduler "\t" reps "\t" ease
 
 due - due date in days since Jan 1 1970 (UTC)
-(scheduler-specific)
+scheduler - scheduler ID, e.g. "sm2"
+(SM2-specific)
 reps - repetition count, reset on failed review
 ease - E-factor
 
 Scheduler log
 -------------
 
+proposed changes:
+ - single log file for all entries (would get big /really fast/, but could avoid polluting the file system with lots of tiny (<4k) files)
+ - use seconds for due date (rounded to next day maybe), some algorithms (e.g. ebisu) make use of more granular due dates
+
 	revdate "\t" interval "\t" ease "\t" lapse
 
 revdate - review date in seconds since Jan 1 1970 (UTC)
-(scheduler-specific)
+(SM2-specific)
 interval - how many days (starting from revdate minus 1) until the item appears again
 ease - E-factor
 lapse - "lapse" if the item was not correctly recalled, "" otherwise
