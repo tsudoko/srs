@@ -15,11 +15,9 @@ aux/stub -d /bin/srs/sched
 bind /bin/srs/sched-sm2 /bin/srs/sched
 
 for(i in `{seq 0 5}) {
-	mkdir $testdir/test^$i
-	echo 'front side' $i >> $testdir/test^$i^/front
 	echo 'front side' $i'
 ---
-back side' $i >> $testdir/test^$i^/back
+back side' $i >> $testdir/test^$i
 
 	srs/sched-sm2/add test^$i
 	srs/sched-sm2/rate test^$i $i
