@@ -15,13 +15,13 @@ bind ../cmd /bin/srs
 aux/stub -d /bin/srs/sched
 bind /bin/srs/sched-sm2 /bin/srs/sched
 
-mkdir $testdir/data/test0
-echo 'front side' >> $testdir/data/test0/front
-echo 'front side
----
-back side' >> $testdir/data/test0/back
-
 for(i in `{seq 0 5}) {
+	mkdir $testdir/data/test^$i
+	echo 'front side' $i >> $testdir/data/test^$i^/front
+	echo 'front side' $i'
+---
+back side' $i >> $testdir/data/test^$i^/back
+
 	srs/sched-sm2/add test^$i
 	srs/sched-sm2/rate test^$i $i
 	echo test^$i result:
