@@ -18,6 +18,11 @@ proposed changes:
  - single log file for all entries (would get big /really fast/, but could avoid polluting the file system with lots of tiny (<4k) files)
  - use seconds for due date (rounded to next day maybe), some algorithms (e.g. ebisu) make use of more granular due dates
 
+	scheduler "\n" [schedline "\n"...]
+
+scheduler - scheduler ID, e.g. "sm2"
+schedline:
+
 	revdate "\t" interval "\t" ease "\t" lapse
 
 revdate - review date in seconds since Jan 1 1970 (UTC)

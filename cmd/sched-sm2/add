@@ -1,15 +1,18 @@
 #!/bin/rc
 
-scheddir=$home/lib/srs/sched-sm2
+srsdir=$home/lib/srs
 today=`{echo `{date -nu} 60 / 60 / 24 / p | dc}
 
-mkdir -p `{basename -d $scheddir/$1}
-touch $scheddir/$1 $scheddir/_index
+touch $srsdir/_index
 awk -F'	' \
 	-v 'today='$today \
 	-v 'item='$1 \
 	-v 'scheduler=sm2' \
-	'$2>=today {
+	'
+	BEGIN {
+		print scheduler > (ENVIRON["srsdir"]"/"item".log")
+	}
+	$2>=today {
 		if(!done)
 			print item "\t" today "\t" scheduler "\t" 0 "\t" 2.5
 		print $0
@@ -19,5 +22,5 @@ awk -F'	' \
 		if(!done)
 			print item "\t" today "\t" scheduler "\t" 0 "\t" 2.5
 	}' \
- <$scheddir/_index >$scheddir/_index.new || exit $status
-mv $scheddir/_index.new $scheddir/_index
+ <$srsdir/_index >$srsdir/_index.new || exit $status
+mv $srsdir/_index.new $srsdir/_index

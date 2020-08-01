@@ -7,8 +7,7 @@ rm -rf $testdir
 
 aux/stub -d $home/lib/srs
 mkdir $testdir
-bind $testdir $home/lib/srs
-mkdir $testdir/^(data sched-sm2)
+bind -c $testdir $home/lib/srs
 
 aux/stub -d /bin/srs
 bind ../cmd /bin/srs
@@ -16,18 +15,18 @@ aux/stub -d /bin/srs/sched
 bind /bin/srs/sched-sm2 /bin/srs/sched
 
 for(i in `{seq 0 5}) {
-	mkdir $testdir/data/test^$i
-	echo 'front side' $i >> $testdir/data/test^$i^/front
+	mkdir $testdir/test^$i
+	echo 'front side' $i >> $testdir/test^$i^/front
 	echo 'front side' $i'
 ---
-back side' $i >> $testdir/data/test^$i^/back
+back side' $i >> $testdir/test^$i^/back
 
 	srs/sched-sm2/add test^$i
 	srs/sched-sm2/rate test^$i $i
 	echo test^$i result:
-	cat $home/lib/srs/sched-sm2/test^$i
+	cat $home/lib/srs/test^$i^.log
 	echo
 }
 
 echo index:
-cat $home/lib/srs/sched-sm2/_index
+cat $home/lib/srs/_index

@@ -1,11 +1,11 @@
 #!/bin/rc
 
-scheddir=$home/lib/srs/sched-sm2
+srsdir=$home/lib/srs
 ifs='
 	'
 
 item=$1
-old=`{awk -F'	' -v 'item='$item '$1==item{printf $4+1"\t"$5}' < $scheddir/_index}
+old=`{awk -F'	' -v 'item='$item '$1==item{printf $4+1"\t"$5}' < $srsdir/_index}
 reps=$old(1)
 oldease=$old(2)
 score=$2
@@ -47,7 +47,7 @@ awk -F'	' \
 			ivl = new_ivl(reps, ease)
 		}
 
-		print now "\t" ivl "\t" ease "\t" lapse >> (ENVIRON["scheddir"]"/"item)
+		print now "\t" ivl "\t" ease "\t" lapse >> (ENVIRON["srsdir"]"/"item".log")
 		due = (lapse ? today : today+ivl)
 		reps = (lapse ? 0 : reps)
 	}
@@ -62,5 +62,5 @@ awk -F'	' \
 		if(!done)
 			print item "\t" due "\t" scheduler "\t" reps "\t" ease "\t"
 	}' \
- <$scheddir/_index >$scheddir/_index.new || exit $status
-mv $scheddir/_index.new $scheddir/_index
+ <$srsdir/_index >$srsdir/_index.new || exit $status
+mv $srsdir/_index.new $srsdir/_index

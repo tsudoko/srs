@@ -5,16 +5,16 @@ rfork ne
 # TODO: top-level $srs_dir (like GIT_DIR) (or maybe as first arg to all commands)
 # TODO: ditch front/back, leave that to the renderers (which could be custom tailor-made scripts, e.g. something we have here right now; the point is flexibility as not all card formats might fit this convention, some may contain both the front and the back in one file (e.g. pdfs where page 1 is front and page 2 is back, html with back side enclosed in <details>)
 
-datadir=$home/lib/srs/data
+srsdir=$home/lib/srs
 ifs='
 '
 
 while(pending=`{srs/sched/pending} && ! ~ $pending '') {
 	for(i in $pending) {
-		cat $datadir/$i/front
+		cat $srsdir/$i/front
 		echo '---'
 		read
-		cat $datadir/$i/back
+		cat $srsdir/$i/back
 		echo -n '--- rate your answer: '
 		score=`{read}
 		srs/sched/rate $i $score
