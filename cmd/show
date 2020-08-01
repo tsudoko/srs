@@ -1,0 +1,9 @@
+#!/bin/rc
+
+srsdir=$home/lib/srs
+i=$1
+
+cat $srsdir/$i/front
+echo '---'
+read
+cat $srsdir/$i/back

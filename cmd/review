@@ -11,10 +11,7 @@ ifs='
 
 while(pending=`{srs/sched/pending} && ! ~ $pending '') {
 	for(i in $pending) {
-		cat $srsdir/$i/front
-		echo '---'
-		read
-		cat $srsdir/$i/back
+		srs/show $i
 		echo -n '--- rate your answer: '
 		score=`{read}
 		srs/sched/rate $i $score
