@@ -29,9 +29,12 @@ while(ifs='
 	for(i in $pending) {
 		ifs='	' {i=`{echo $i} && splitparams $i}
 		srs/show $item
-		echo -n '--- rate your answer: '
-		score=`{read}
-		srs/sched-$scheduler/rate $item $score $schedargs
-		echo
+		status=init
+		while(! ~ $status '') {
+			echo -n '--- rate your answer: '
+			score=`{read}
+			if(! ~ $score '')
+				srs/sched-$scheduler/rate $item $score $schedargs
+		}
 	}
 }
