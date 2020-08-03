@@ -13,7 +13,7 @@ fn pending {
 			today = int(now/60/60/24)
 		}
 		{ if($2<=today) print; else exit }
-	' <$srsdir/_index
+	' $srsdir/_index
 }
 
 fn splitparams {

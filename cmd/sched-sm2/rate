@@ -55,5 +55,5 @@ awk -F'	' \
 		if(!done)
 			print item "\t" due "\t" scheduler "\t" reps "\t" ease "\t"
 	}' \
- <$srsdir/_index >$srsdir/_index.new || exit $status
+ $srsdir/_index >$srsdir/_index.new || exit $status
 mv $srsdir/_index.new $srsdir/_index
