@@ -6,13 +6,32 @@ rfork ne
 
 srsdir=$home/lib/srs
 
+fn pending {
+	awk -F'	' '
+		BEGIN {
+			"date -n" | getline now
+			today = int(now/60/60/24)
+		}
+		{ if($2<=today) print; else exit }
+	' <$srsdir/_index
+}
+
+fn splitparams {
+	item=$1
+	scheduler=$3
+	shift; shift; shift
+	schedargs=$*
+}
+
+# this is ugly
 while(ifs='
-' {pending=`{srs/sched/pending}} && ! ~ $pending '') {
+' {pending=`{pending}} && ! ~ $pending '') {
 	for(i in $pending) {
-		srs/show $i
+		ifs='	' {i=`{echo $i} && splitparams $i}
+		srs/show $item
 		echo -n '--- rate your answer: '
 		score=`{read}
-		srs/sched/rate $i $score
+		srs/sched-$scheduler/rate $item $score $schedargs
 		echo
 	}
 }

@@ -2,17 +2,11 @@
 
 srsdir=$home/lib/srs
 
-item=$1
-ifs='	' {old=`{awk -F'	' -v 'item='$item '$1==item{printf $4+1"\t"$5}' < $srsdir/_index}}
-reps=$old(1)
-oldease=$old(2)
-score=$2
-
 awk -F'	' \
-	-v 'item='$item \
-	-v 'score='$score \
-	-v 'oldease='$oldease \
-	-v 'reps='$reps \
+	-v 'item='$1 \
+	-v 'score='$2 \
+	-v 'reps='$3 \
+	-v 'oldease='$4 \
 	-v 'scheduler=sm2' \
 	'
 	function new_ivl(reps, ease) {
@@ -34,6 +28,7 @@ awk -F'	' \
 	}
 
 	BEGIN {
+		++reps
 		"date -n" | getline now
 		today = int(now / 60 / 60 / 24)
 		if(score < 3) {
