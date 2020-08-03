@@ -5,10 +5,9 @@ rfork ne
 # TODO: top-level $srs_dir (like GIT_DIR) (or maybe as first arg to all commands)
 
 srsdir=$home/lib/srs
-ifs='
-'
 
-while(pending=`{srs/sched/pending} && ! ~ $pending '') {
+while(ifs='
+' {pending=`{srs/sched/pending}} && ! ~ $pending '') {
 	for(i in $pending) {
 		srs/show $i
 		echo -n '--- rate your answer: '
