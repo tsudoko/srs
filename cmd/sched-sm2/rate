@@ -8,7 +8,7 @@ awk -F'	' \
 	-v 'reps='$3 \
 	-v 'oldease='$4 \
 	-v 'scheduler=sm2' \
-	'
+'
 	function new_ivl(reps, ease) {
 		if(reps <= 1)
 			return 1
@@ -54,6 +54,6 @@ awk -F'	' \
 	END {
 		if(!done)
 			print item "\t" due "\t" scheduler "\t" reps "\t" ease "\t"
-	}' \
- $srsdir/_index >$srsdir/_index.new || exit $status
+	}
+' $srsdir/_index >$srsdir/_index.new || exit $status
 mv $srsdir/_index.new $srsdir/_index
