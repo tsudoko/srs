@@ -11,8 +11,6 @@ bind -c $testdir $home/lib/srs
 
 aux/stub -d /bin/srs
 bind ../cmd /bin/srs
-aux/stub -d /bin/srs/sched
-bind /bin/srs/sched-sm2 /bin/srs/sched
 
 for(i in `{seq 0 5}) {
 	echo 'front side' $i'
