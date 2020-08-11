@@ -27,7 +27,8 @@ fn splitparams {
 while(ifs='
 ' {pending=`{pending}} && ! ~ $pending '') {
 	for(i in $pending) {
-		ifs='	' {i=`{echo $i} && splitparams $i}
+		ifs='
+	' {i=`{echo $i} && splitparams $i}
 		srs/show $item
 		status=init
 		while(! ~ $status '') {
