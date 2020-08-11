@@ -3,13 +3,14 @@ Index file
 
 Entries are sorted by due date in ascending order.
 
-	itemname "\t" due "\t" scheduler "\t" reps "\t" ease
+	itemname "\t" due "\t" scheduler "\t" reps "\t" ease "\t" interval
 
 due - due date in days since Jan 1 1970 (UTC)
 scheduler - scheduler ID, e.g. "sm2"
 (SM2-specific)
 reps - repetition count, reset on failed review
 ease - E-factor
+interval - (due - last review time)
 
 Scheduler log
 -------------

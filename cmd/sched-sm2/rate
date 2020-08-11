@@ -12,6 +12,7 @@ awk -F'	' \
 	-v 'score='$2 \
 	-v 'reps='$3 \
 	-v 'oldease='$4 \
+	-v 'oldivl='$5 \
 	-v 'scheduler=sm2' \
 '
 	function new_ivl(reps, ease) {
@@ -20,7 +21,7 @@ awk -F'	' \
 		if(reps == 2)
 			return 6
 
-		return new_ivl(reps-1, ease)*ease
+		return oldivl*ease
 	}
 
 	function new_ease(ease, score) {
@@ -50,7 +51,7 @@ awk -F'	' \
 		reps = (lapse ? 0 : reps)
 	}
 	$2>=due && !done {
-		print item "\t" due "\t" scheduler "\t" reps "\t" ease "\t"
+		print item "\t" due "\t" scheduler "\t" reps "\t" ease "\t" ivl
 		done=1
 	}
 	$1!=item {
@@ -58,7 +59,7 @@ awk -F'	' \
 	}
 	END {
 		if(!done)
-			print item "\t" due "\t" scheduler "\t" reps "\t" ease "\t"
+			print item "\t" due "\t" scheduler "\t" reps "\t" ease "\t" ivl
 	}
 ' $srsdir/_index >$srsdir/_index.new || exit $status
 mv $srsdir/_index.new $srsdir/_index

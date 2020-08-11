@@ -18,7 +18,7 @@ for(i in `{seq 0 5}) {
 back side' $i >> $testdir/test^$i
 
 	srs/sched-sm2/add test^$i
-	srs/sched-sm2/rate test^$i $i 0 2.5
+	srs/sched-sm2/rate test^$i $i 0 2.5 1
 	echo test^$i result:
 	cat $home/lib/srs/test^$i^.log
 	echo
